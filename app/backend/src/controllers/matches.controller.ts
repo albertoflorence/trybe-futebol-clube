@@ -21,4 +21,11 @@ export default class Matches extends Controller {
     const result = await this.matchService.finishGame(Number(id));
     this.handleResponse(res, result);
   }
+
+  async update(req: Request, res: Response) {
+    const { id } = req.params;
+    const { body } = req;
+    const result = await this.matchService.update(Number(id), body);
+    this.handleResponse(res, result);
+  }
 }

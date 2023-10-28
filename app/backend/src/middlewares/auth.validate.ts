@@ -24,7 +24,7 @@ const handleStatus = (type: string): number => {
 
 const login = handleValidate(schema, handleStatus);
 
-export const authorization = async (req: Request, res: Response, next: NextFunction) => {
+export const authentication = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.headers.authorization) {
     return res.status(401).json({ message: 'Token not found' });
   }

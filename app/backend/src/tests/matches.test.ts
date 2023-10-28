@@ -33,7 +33,7 @@ describe('matches', () => {
     sinon.restore();
   });
 
-  describe('/matches', () => {
+  describe('GET /matches', () => {
     it('should return all matches', async () => {
       const data = [dataInProgress, dataNotInProgress];
       modelStubBulk(MatchModel, 'findAll', data);
@@ -59,26 +59,36 @@ describe('matches', () => {
     });
   });
 
-  describe('matches/:id/finish', () => {
+  describe('PATCH matches/:id/finish', () => {
+    it('should return 200 if match finished', async () => {
+      modelStub(MatchModel, 'findByPk', dataInProgress);
+      const result = await request(app).patch('/matches/1/finish');
+      expect(result).to.have.status(200);
+      expect(result.body).to.deep.equal({ message: 'Match finished' });
+    });
+  });
+
+  describe('PATCH matches/:id', () => {
     it('should return 404 if match not found', async () => {
       modelStub(MatchModel, 'findByPk', null);
-      const result = await request(app).patch('/matches/1/finish');
+      const result = await request(app).patch('/matches/1');
       expect(result).to.have.status(404);
       expect(result.body).to.deep.equal({ message: 'Match not found' });
     });
 
     it('should return 401 if match already finished', async () => {
       modelStub(MatchModel, 'findByPk', dataNotInProgress);
-      const result = await request(app).patch('/matches/1/finish');
+      const result = await request(app).patch('/matches/1');
       expect(result).to.have.status(401);
       expect(result.body).to.deep.equal({ message: 'Match already finished' });
     });
 
-    it('should return 200 if match finished', async () => {
+    it('should return 200 if match is updated', async () => {
       modelStub(MatchModel, 'findByPk', dataInProgress);
-      const result = await request(app).patch('/matches/1/finish');
+      const result = await request(app)
+        .patch('/matches/1/finish')
+        .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
       expect(result).to.have.status(200);
-      expect(result.body).to.deep.equal({ message: 'Match finished' });
     });
   });
 });
