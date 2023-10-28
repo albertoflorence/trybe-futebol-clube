@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import Match from '../../Interfaces/Match';
 import db from '.';
+import TeamModel from './TeamModel';
 
 type InferOrderCreationAttributes = Optional<Match, 'id'>;
 export type IMatchModel = Model<Match, InferOrderCreationAttributes>;
@@ -43,3 +44,15 @@ MatchModel.init(
     underscored: true,
   },
 );
+
+MatchModel.belongsTo(TeamModel, {
+  as: 'homeTeam',
+  foreignKey: 'homeTeamId',
+  targetKey: 'id',
+});
+
+MatchModel.belongsTo(TeamModel, {
+  as: 'awayTeam',
+  foreignKey: 'awayTeamId',
+  targetKey: 'id',
+});
