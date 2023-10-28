@@ -8,6 +8,7 @@ import { app } from '../app';
 import { modelStub, modelStubBulk } from './helper';
 import MatchModel from '../database/models/MatchModel';
 import UserModel from '../database/models/UserModel';
+import TeamModel from '../database/models/TeamModel';
 
 chai.use(chaiHttp);
 const { expect, request } = chai;
@@ -104,9 +105,33 @@ describe('matches', () => {
       expect(result).to.have.status(200);
     });
   });
+
   describe('POST /matches', () => {
+    it('should not create a match with two equal teams', async () => {
+      const result = await request(app)
+        .post('/matches')
+        .send({ homeTeamId: 1, awayTeamId: 1 })
+        .set('Authorization', 'Bearer any_token');
+      expect(result).to.have.status(422);
+      expect(result.body).to.deep.equal({
+        message: 'It is not possible to create a match with two equal teams',
+      });
+    });
+
+    it('should not create a match with a team that does not exist', async () => {
+      modelStub(MatchModel, 'create', dataInProgress);
+      modelStubBulk(TeamModel, 'findAll', [{ id: 1 }]);
+      const result = await request(app)
+        .post('/matches')
+        .send(dataInProgress)
+        .set('Authorization', 'Bearer any_token');
+      expect(result).to.have.status(404);
+      expect(result.body).to.deep.equal({ message: 'There is no team with such id!' });
+    });
+
     it('should return 200 if match created', async () => {
       modelStub(MatchModel, 'create', dataInProgress);
+      modelStubBulk(TeamModel, 'findAll', [{ id: 1 }, { id: 2 }]);
       const result = await request(app)
         .post('/matches')
         .send(dataInProgress)

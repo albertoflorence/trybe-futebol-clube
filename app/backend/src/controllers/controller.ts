@@ -5,8 +5,9 @@ function mapCodeToHttp(code: Code): number {
   const codes = {
     ok: 200,
     created: 201,
-    notFound: 404,
     unauthorized: 401,
+    notFound: 404,
+    unprocessable: 422,
   };
   return codes[code];
 }

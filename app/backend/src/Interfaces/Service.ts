@@ -2,7 +2,7 @@ interface ResultError {
   message: string;
 }
 
-export type Code = 'ok' | 'notFound' | 'unauthorized' | 'created';
+export type Code = 'ok' | 'created' | 'notFound' | 'unauthorized' | 'unprocessable';
 
 export interface Result<T = unknown> {
   code: Code;
