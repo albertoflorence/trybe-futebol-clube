@@ -9,8 +9,9 @@ const normalize = (match: IMatchModel): Match => match.dataValues;
 export default class MatchService implements IMatchService {
   model = MatchModel;
 
-  async findAll(): ServiceResult<Match[]> {
+  async findAll(query: Partial<Match>): ServiceResult<Match[]> {
     const result = await this.model.findAll({
+      where: query,
       include: [
         { model: TeamModel, attributes: ['teamName'], as: 'homeTeam' },
         { model: TeamModel, attributes: ['teamName'], as: 'awayTeam' },
