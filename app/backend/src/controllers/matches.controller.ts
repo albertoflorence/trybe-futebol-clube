@@ -28,4 +28,9 @@ export default class Matches extends Controller {
     const result = await this.matchService.update(Number(id), body);
     this.handleResponse(res, result);
   }
+
+  async create(req: Request, res: Response) {
+    const result = await this.matchService.create(req.body);
+    this.handleResponse(res, result);
+  }
 }

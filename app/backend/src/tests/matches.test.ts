@@ -104,4 +104,15 @@ describe('matches', () => {
       expect(result).to.have.status(200);
     });
   });
+  describe('POST /matches', () => {
+    it('should return 200 if match created', async () => {
+      modelStub(MatchModel, 'create', dataInProgress);
+      const result = await request(app)
+        .post('/matches')
+        .send(dataInProgress)
+        .set('Authorization', 'Bearer any_token');
+      expect(result).to.have.status(201);
+      expect(result.body).to.deep.equal(dataInProgress);
+    });
+  });
 });

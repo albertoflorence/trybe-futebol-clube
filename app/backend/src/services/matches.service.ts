@@ -2,7 +2,7 @@ import TeamModel from '../database/models/TeamModel';
 import MatchModel, { IMatchModel } from '../database/models/MatchModel';
 import ServiceResult from '../Interfaces/Service';
 import IMatchService from '../Interfaces/MatchService';
-import Match from '../Interfaces/Match';
+import Match, { MatchCreate } from '../Interfaces/Match';
 
 const normalize = (match: IMatchModel): Match => match.dataValues;
 
@@ -36,5 +36,10 @@ export default class MatchService implements IMatchService {
     const result = await this.update(id, { inProgress: false });
     if (result.code !== 'ok') return result;
     return { code: 'ok', data: { message: 'Match finished' } };
+  }
+
+  async create(data: MatchCreate): ServiceResult<Match> {
+    const result = await this.model.create({ ...data, inProgress: true });
+    return { code: 'created', data: result.dataValues };
   }
 }

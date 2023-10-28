@@ -7,6 +7,7 @@ const route = Router();
 const controller = new MatchController();
 
 route.get('/', (req, res) => controller.findAll(req, res));
+route.post('/', authentication, (req, res) => controller.create(req, res));
 route.patch('/:id/finish', authentication, (req, res) => controller.finish(req, res));
 route.patch('/:id', authentication, (req, res) => controller.update(req, res));
 
