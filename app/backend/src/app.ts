@@ -1,5 +1,14 @@
 import * as express from 'express';
 import routes from './routes';
+import User from './Interfaces/User';
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    locals: {
+      user: User;
+    };
+  }
+}
 
 class App {
   public app: express.Express;

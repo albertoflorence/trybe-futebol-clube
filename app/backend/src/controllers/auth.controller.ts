@@ -12,4 +12,10 @@ export default class Auth extends Controller {
     const result = await this.authService.login(req.body);
     this.handleResponse(res, result);
   }
+
+  async getRole(req: Request, res: Response) {
+    const { user } = req.locals;
+    res.status(200).json({ role: user.role });
+    return this;
+  }
 }
