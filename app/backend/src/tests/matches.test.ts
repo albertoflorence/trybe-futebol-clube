@@ -4,7 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import { modelStubBulk } from './helper';
+import { modelStub, modelStubBulk } from './helper';
 import MatchModel from '../database/models/MatchModel';
 
 chai.use(chaiHttp);
@@ -33,27 +33,52 @@ describe('matches', () => {
     sinon.restore();
   });
 
-  it('should return all matches', async () => {
-    const data = [dataInProgress, dataNotInProgress];
-    modelStubBulk(MatchModel, 'findAll', data);
-    const result = await request(app).get('/matches');
-    expect(result).to.have.status(200);
-    expect(result.body).to.deep.equal(data);
+  describe('/matches', () => {
+    it('should return all matches', async () => {
+      const data = [dataInProgress, dataNotInProgress];
+      modelStubBulk(MatchModel, 'findAll', data);
+      const result = await request(app).get('/matches');
+      expect(result).to.have.status(200);
+      expect(result.body).to.deep.equal(data);
+    });
+
+    it('should return only matches with inProgress = true', async () => {
+      const data = [dataInProgress];
+      modelStubBulk(MatchModel, 'findAll', data);
+      const result = await request(app).get('/matches?inProgress=true');
+      expect(result).to.have.status(200);
+      expect(result.body).to.deep.equal(data);
+    });
+
+    it('should return only matches with inProgress = false', async () => {
+      const data = [dataNotInProgress];
+      modelStubBulk(MatchModel, 'findAll', data);
+      const result = await request(app).get('/matches?inProgress=false');
+      expect(result).to.have.status(200);
+      expect(result.body).to.deep.equal(data);
+    });
   });
 
-  it('should return only matches with inProgress = true', async () => {
-    const data = [dataInProgress];
-    modelStubBulk(MatchModel, 'findAll', data);
-    const result = await request(app).get('/matches?inProgress=true');
-    expect(result).to.have.status(200);
-    expect(result.body).to.deep.equal(data);
-  });
+  describe('matches/:id/finish', () => {
+    it('should return 404 if match not found', async () => {
+      modelStub(MatchModel, 'findByPk', null);
+      const result = await request(app).patch('/matches/1/finish');
+      expect(result).to.have.status(404);
+      expect(result.body).to.deep.equal({ message: 'Match not found' });
+    });
 
-  it('should return only matches with inProgress = false', async () => {
-    const data = [dataNotInProgress];
-    modelStubBulk(MatchModel, 'findAll', data);
-    const result = await request(app).get('/matches?inProgress=false');
-    expect(result).to.have.status(200);
-    expect(result.body).to.deep.equal(data);
+    it('should return 401 if match already finished', async () => {
+      modelStub(MatchModel, 'findByPk', dataNotInProgress);
+      const result = await request(app).patch('/matches/1/finish');
+      expect(result).to.have.status(401);
+      expect(result.body).to.deep.equal({ message: 'Match already finished' });
+    });
+
+    it('should return 200 if match finished', async () => {
+      modelStub(MatchModel, 'findByPk', dataInProgress);
+      const result = await request(app).patch('/matches/1/finish');
+      expect(result).to.have.status(200);
+      expect(result.body).to.deep.equal({ message: 'Match finished' });
+    });
   });
 });

@@ -15,4 +15,10 @@ export default class Matches extends Controller {
     const result = await this.matchService.findAll(parseBooleanQuery(query));
     this.handleResponse(res, result);
   }
+
+  async finish(req: Request, res: Response) {
+    const { id } = req.params;
+    const result = await this.matchService.finishGame(Number(id));
+    this.handleResponse(res, result);
+  }
 }

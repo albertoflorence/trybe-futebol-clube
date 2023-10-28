@@ -6,5 +6,6 @@ const route = Router();
 const controller = new MatchController();
 
 route.get('/', (req, res) => controller.findAll(req, res));
+route.patch('/:id/finish', (req, res) => controller.finish(req, res));
 
 export default route;
