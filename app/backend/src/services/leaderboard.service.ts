@@ -14,7 +14,7 @@ export default class LeaderboardService implements ILeaderboardService {
   matchModel = MatchModel;
   db = db;
 
-  async getHome(): ServiceResult<Leaderboard[]> {
+  async findHome(): ServiceResult<Leaderboard[]> {
     const result = (await this.db.query(createQuery('home'), {
       type: QueryTypes.SELECT,
     })) as Leaderboard[];
@@ -22,8 +22,16 @@ export default class LeaderboardService implements ILeaderboardService {
     return { code: 'ok', data: result };
   }
 
-  async getAway(): ServiceResult<Leaderboard[]> {
+  async findAway(): ServiceResult<Leaderboard[]> {
     const result = (await this.db.query(createQuery('away'), {
+      type: QueryTypes.SELECT,
+    })) as Leaderboard[];
+
+    return { code: 'ok', data: result };
+  }
+
+  async findAll(): ServiceResult<Leaderboard[]> {
+    const result = (await this.db.query(createQuery('all'), {
       type: QueryTypes.SELECT,
     })) as Leaderboard[];
 

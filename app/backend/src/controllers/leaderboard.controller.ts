@@ -10,13 +10,18 @@ export default class LeaderboardController extends Controller {
     super();
   }
 
-  async getHome(req: Request, res: Response) {
-    const result = await this.leaderboardService.getHome();
+  async findHome(req: Request, res: Response) {
+    const result = await this.leaderboardService.findHome();
     this.handleResponse(res, result);
   }
 
-  async getAway(req: Request, res: Response) {
-    const result = await this.leaderboardService.getAway();
+  async findAway(req: Request, res: Response) {
+    const result = await this.leaderboardService.findAway();
+    this.handleResponse(res, result);
+  }
+
+  async findAll(req: Request, res: Response) {
+    const result = await this.leaderboardService.findAll();
     this.handleResponse(res, result);
   }
 }

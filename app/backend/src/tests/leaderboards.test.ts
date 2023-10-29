@@ -15,6 +15,15 @@ describe('/leaderboard', () => {
     sinon.restore();
   })
 
+  describe('GET /', () => {
+    it('should return the home leaderboard', async () => {
+      sinon.stub(db, 'query').resolves()
+      const result = await request(app).get('/leaderboard')
+      expect(result).to.have.status(200)
+      expect(result.body).to.equal('')
+    })
+  })
+
   describe('GET /home', () => {
     it('should return the home leaderboard', async () => {
       sinon.stub(db, 'query').resolves()

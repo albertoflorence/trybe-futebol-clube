@@ -2,6 +2,7 @@ import { Leaderboard } from './Leaderboard';
 import ServiceResult from './Service';
 
 export default interface LeaderBoardService {
-  getHome(): ServiceResult<Leaderboard[]>;
-  getAway(): ServiceResult<Leaderboard[]>;
+  findHome(): ServiceResult<Leaderboard[]>;
+  findAway(): ServiceResult<Leaderboard[]>;
+  findAll(): ServiceResult<Leaderboard[]>;
 }
