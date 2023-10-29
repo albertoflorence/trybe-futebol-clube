@@ -14,4 +14,9 @@ export default class LeaderboardController extends Controller {
     const result = await this.leaderboardService.getHome();
     this.handleResponse(res, result);
   }
+
+  async getAway(req: Request, res: Response) {
+    const result = await this.leaderboardService.getAway();
+    this.handleResponse(res, result);
+  }
 }

@@ -3,4 +3,5 @@ import ServiceResult from './Service';
 
 export default interface LeaderBoardService {
   getHome(): ServiceResult<Leaderboard[]>;
+  getAway(): ServiceResult<Leaderboard[]>;
 }

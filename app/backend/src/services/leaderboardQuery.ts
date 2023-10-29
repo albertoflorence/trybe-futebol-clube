@@ -1,4 +1,4 @@
-export default `
+const query = `
 SELECT
   r.name,
   r.totalGames,
@@ -17,7 +17,6 @@ FROM
       COUNT(*) AS totalGames,
       SUM(m.home_team_goals) as goalsFavor,
       SUM(m.away_team_goals) as goalsOwn,
-      (SUM(m.home_team_goals) - SUM(m.away_team_goals)) as goalsBalance,
       SUM(
         CASE
           WHEN m.home_team_goals > m.away_team_goals THEN 1
@@ -49,3 +48,12 @@ FROM
     goalsBalance DESC,
     goalsFavor DESC
   `;
+
+type homeOrAway = 'home' | 'away';
+
+export default function createQuery(type: homeOrAway) {
+  return type === 'home'
+    ? query
+    : query.replace(/(home)|(away)/g, (_, group) =>
+      (group ? 'away' : 'home'));
+}

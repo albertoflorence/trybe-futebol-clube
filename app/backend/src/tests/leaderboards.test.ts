@@ -16,9 +16,18 @@ describe('/leaderboard', () => {
   })
 
   describe('GET /home', () => {
-    it('should return a home leaderboard', async () => {
+    it('should return the home leaderboard', async () => {
       sinon.stub(db, 'query').resolves()
       const result = await request(app).get('/leaderboard/home')
+      expect(result).to.have.status(200)
+      expect(result.body).to.equal('')
+    })
+  })
+
+  describe('GET /away', () => {
+    it('should return the away leaderboard', async () => {
+      sinon.stub(db, 'query').resolves()
+      const result = await request(app).get('/leaderboard/away')
       expect(result).to.have.status(200)
       expect(result.body).to.equal('')
     })
