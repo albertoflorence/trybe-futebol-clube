@@ -9,8 +9,9 @@ const config: Options = {
   dialect: 'mysql',
   dialectOptions: {
     timezone: 'Z',
+    decimalNumbers: true,
   },
   logging: false,
-}
+};
 
 export = config;
